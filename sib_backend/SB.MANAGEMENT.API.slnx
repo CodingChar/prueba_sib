@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="SIB.API/SB.Management.API.csproj" />
+  <Project Path="SIB.Application/SB.Management.Application.csproj" Id="ba0d56f4-1a42-41e3-8ad1-fd7c4067ca94" />
+  <Project Path="SIB.Domain/SB.Management.Domain.csproj" Id="e062f5e5-217c-40aa-9e5e-90b7d95e3146" />
+  <Project Path="SIB.Infrastructure/SB.Management.Infrastructure.csproj" Id="ee61eed0-3a75-4ba9-b634-1a3b0528b2c4" />
+</Solution>
