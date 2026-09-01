@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+:root {
+  --color-sb-azul: rgba(13, 48, 72, 0.9);
+  --color-sb-gris: rgba(237, 240, 247, 1);
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+}
