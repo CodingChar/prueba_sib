@@ -1,12 +1,23 @@
 # SB.Management — Gestión de Pagos de Empleados
 
-API en .NET 8 / C# y frontend en React + TypeScript + Tailwind CSS, desarrollados
-para la prueba técnica de la Superintendencia de Bancos de la República Dominicana.
+API en .NET 8 / C# y frontend en React + TypeScript + Tailwind CSS, genuninamente uno de los stacks mas interesantes que he usado, aunque estandar en la industria de RD.
 
 Calcula los pagos semanales de empleados según su tipo de contrato, gestiona
 usuarios con roles (Admin/Usuario) vía JWT, genera reportes por periodo, y
 mantiene un catálogo CRUD de entidades gubernamentales de la República
 Dominicana.
+
+Se usaron arquitecturas que facilitan el desarrollo agil de la aplicacion, siendo estas la arquitectura de cebolla o onion  en ingles!
+
+
+##Reflexion 
+
+Anteriormente he trabajado con la arquitectura en cebolla y la hexagonal, implemnentandola con Java SpringBoot; es ligeramente diferente a C#, se me hizo mas facil porque estaba mas acostumbrado a usar hibernate en vez de Entity Framework, pero la verstailidad es importante y por eso me logre desevolver basstante bien en el proyecto.
+
+Me auxilie de la inteligencia artificial con la documentacion y con partes tediosas del proyecto que entendia que se podian hacer rapido.
+
+Por ejemplo en los DTOs y Servicios. 
+
 
 ## Contenido
 
@@ -115,9 +126,7 @@ sin tocar la lógica de negocio central.
 
 ### Persistencia dual: SQL Server + archivo de texto plano
 
-El enunciado original de la prueba (`Prueba tecnica-1.pdf`) pide SQL Server
-u Oracle para la aplicación de gestión de pagos. Un documento adicional
-(`Instrucciones.txt` + `API - Especificaciones Técnicas.pdf`) añadió el
+SQL Server u Oracle para la aplicación de gestión de pagos. Un documento adicional añadió el
 requisito de un mantenimiento de entidades gubernamentales con "base de
 datos" en archivo de texto plano, ubicado dentro del proyecto. Dado que el
 objetivo de ese segundo documento liga explícitamente el archivo plano "a
@@ -127,7 +136,8 @@ este propósito" (el catálogo de entidades gubernamentales), se optó por:
 - `EntidadGubernamental` → archivo JSON en `App_Data/`, leído/escrito
   directamente por `EntidadGubernamentalFileRepository`
 
-Esta interpretación satisface ambos documentos sin contradicción textual.
+Esto permite satisfacer los enunciados de las instrucciones y documentacion dadas; 
+Aunque anteriormente se considero ingresarlos a la base de datos SQLServer, esta idea se descarto porque podria no cumplir los requerimientos. 
 
 ### Mapeo TPT (Table Per Type) para la jerarquía de Empleado
 
@@ -163,20 +173,32 @@ lógica en un stored procedure o trigger de SQL, para no mantener la misma
 regla de negocio en dos lugares distintos, y para permitir pruebas
 unitarias rápidas sin depender de una base de datos real.
 
-### Departamento como atributo simple, no como entidad
+### Departamento como atributo simple, no como entidad; Estado como atributo de Activo/Inactivo 
+
+Departamento:
 
 El enunciado pide poder filtrar empleados por departamento, pero no lo
 incluye entre los campos a capturar según el tipo de empleado (sección de
 "Requisitos funcionales"). Se optó por modelarlo como un atributo de texto
-simple en `Empleado`, sin tabla catálogo ni FK — una desnormalización
-deliberada y documentada, razonable dado que el enunciado no pide gestión
-de departamentos como entidad propia, solo filtrado.
+simple en `Empleado`. 
+
+Una decision hecha meramente por ahorro de tiempo para el desarrollo de la prueba tecnica, sin embargo, se reconoce que es un error garrafal dado a que podria afectar la consistencia de los datos. 
+
+Estado: 
+
+El atributo estado de empleado, era evidente que podria referirse al eestado como lugar fisico del empleado, es decir la provincia donde pertenece; sin embargo, considere que usarlo como un atributo para indicar si se encuentra activo o no ahorraba mas tiempo.
+
+Aun asi, se comprende perfectamente como se hubiese aplicado de la otra manera, pues hubiese requerido un atributo con clave foranea a una tabla Estados. 
+
+
 
 ### Reportería por rango de fechas
 
 `Pago` se consulta por `FechaInicio`/`FechaFin` en vez de una fecha puntual,
 para que un mismo endpoint sirva tanto para reportes semanales como para
 cualquier periodo arbitrario que se necesite, sin duplicar lógica.
+
+Sin embargo, en el frontend no se facilita de forma intuitiva 
 
 ### Números mágicos como constantes nombradas
 
@@ -262,3 +284,6 @@ que los archivos `.csproj`, namespaces y ensamblados usan el prefijo
 `SB.Management.`, siguiendo la convención `[SB].[NombreProyecto].[Capa]`
 del documento de especificaciones técnicas. Esto no afecta la compilación
 ni el funcionamiento del proyecto.
+
+// -> habia nombrado mal el proyecto inicialmente, esa es la razon historica. 
+
