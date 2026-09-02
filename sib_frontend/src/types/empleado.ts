@@ -45,3 +45,19 @@ export type CrearAsalariadoComisionPayload = {
   tarifaComision: number
   salarioBase: number
 }
+
+export type EmpleadoDetalle = {
+  id: number
+  tipo: TipoEmpleado
+  primerNombre: string | null
+  apellidoPaterno: string
+  numeroSeguroSocial: string
+  departamento: string
+  estado: string
+  salarioSemanal: number | null
+  sueldoPorHora: number | null
+  horasTrabajadas: number | null
+  ventasBrutas: number | null
+  tarifaComision: number | null
+  salarioBase: number | null
+}

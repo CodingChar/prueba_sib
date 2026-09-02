@@ -70,5 +70,64 @@ namespace SB.Management.API.Controllers
             var reporte = await _empleadoService.GenerarReportePorPeriodoAsync(fechaInicio, fechaFin);
             return Ok(reporte);
         }
+
+        [HttpPut("asalariado/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ActualizarAsalariado(int id, ActualizarEmpleadoAsalariadoDto dto)
+        {
+            var actualizado = await _empleadoService.ActualizarAsalariadoAsync(id, dto);
+            if (!actualizado)
+            {
+                return NotFound(new { mensaje = "Empleado no encontrado o no es del tipo Asalariado." });
+            }
+            return NoContent();
+        }
+
+        [HttpPut("por-hora/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ActualizarPorHora(int id, ActualizarEmpleadoPorHoraDto dto)
+        {
+            var actualizado = await _empleadoService.ActualizarPorHoraAsync(id, dto);
+            if (!actualizado)
+            {
+                return NotFound(new { mensaje = "Empleado no encontrado o no es del tipo Por Hora." });
+            }
+            return NoContent();
+        }
+
+        [HttpPut("por-comision/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ActualizarPorComision(int id, ActualizarEmpleadoPorComisionDto dto)
+        {
+            var actualizado = await _empleadoService.ActualizarPorComisionAsync(id, dto);
+            if (!actualizado)
+            {
+                return NotFound(new { mensaje = "Empleado no encontrado o no es del tipo Por Comisión." });
+            }
+            return NoContent();
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<EmpleadoDetalleDto>> ObtenerDetalle(int id)
+        {
+            var detalle = await _empleadoService.ObtenerDetallePorIdAsync(id);
+            if (detalle is null)
+            {
+                return NotFound();
+            }
+            return Ok(detalle);
+        }
+
+        [HttpPut("asalariado-comision/{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ActualizarAsalariadoComision(int id, ActualizarEmpleadoAsalariadoComisionDto dto)
+        {
+            var actualizado = await _empleadoService.ActualizarAsalariadoComisionAsync(id, dto);
+            if (!actualizado)
+            {
+                return NotFound(new { mensaje = "Empleado no encontrado o no es del tipo Asalariado por Comisión." });
+            }
+            return NoContent();
+        }
     }
 }

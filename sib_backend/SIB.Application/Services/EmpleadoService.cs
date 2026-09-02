@@ -42,6 +42,103 @@ namespace SB.Management.Application.Services
             return empleado.Id;
         }
 
+        public async Task<bool> ActualizarAsalariadoAsync(int id, ActualizarEmpleadoAsalariadoDto dto)
+        {
+            var empleado = await _empleadoRepository.ObtenerPorIdAsync(id);
+            if (empleado is not EmpleadoAsalariado asalariado)
+            {
+                return false;
+            }
+
+            asalariado.SalarioSemanal = dto.SalarioSemanal;
+            await _empleadoRepository.ActualizarAsync(asalariado);
+            await _empleadoRepository.GuardarCambiosAsync();
+            _logger.LogInformation("Empleado asalariado {Id} actualizado", id);
+            return true;
+        }
+
+        public async Task<bool> ActualizarPorHoraAsync(int id, ActualizarEmpleadoPorHoraDto dto)
+        {
+            var empleado = await _empleadoRepository.ObtenerPorIdAsync(id);
+            if (empleado is not EmpleadoPorHora porHora)
+            {
+                return false;
+            }
+
+            porHora.SueldoPorHora = dto.SueldoPorHora;
+            porHora.HorasTrabajadas = dto.HorasTrabajadas;
+            await _empleadoRepository.ActualizarAsync(porHora);
+            await _empleadoRepository.GuardarCambiosAsync();
+            _logger.LogInformation("Empleado por hora {Id} actualizado: {Horas} horas", id, dto.HorasTrabajadas);
+            return true;
+        }
+
+        public async Task<bool> ActualizarPorComisionAsync(int id, ActualizarEmpleadoPorComisionDto dto)
+        {
+            var empleado = await _empleadoRepository.ObtenerPorIdAsync(id);
+            if (empleado is not EmpleadoPorComision porComision)
+            {
+                return false;
+            }
+
+            porComision.VentasBrutas = dto.VentasBrutas;
+            porComision.TarifaComision = dto.TarifaComision;
+            await _empleadoRepository.ActualizarAsync(porComision);
+            await _empleadoRepository.GuardarCambiosAsync();
+            _logger.LogInformation("Empleado por comisión {Id} actualizado", id);
+            return true;
+        }
+        public async Task<EmpleadoDetalleDto?> ObtenerDetallePorIdAsync(int id)
+        {
+            var empleado = await _empleadoRepository.ObtenerPorIdAsync(id);
+            if (empleado is null)
+            {
+                return null;
+            }
+
+            return empleado switch
+            {
+                EmpleadoAsalariado asalariado => new EmpleadoDetalleDto(
+                    asalariado.Id, "Asalariado", asalariado.PrimerNombre, asalariado.ApellidoPaterno,
+                    asalariado.NumeroSeguroSocial, asalariado.Departamento, asalariado.Estado,
+                    asalariado.SalarioSemanal, null, null, null, null, null),
+
+                EmpleadoPorHora porHora => new EmpleadoDetalleDto(
+                    porHora.Id, "PorHora", porHora.PrimerNombre, porHora.ApellidoPaterno,
+                    porHora.NumeroSeguroSocial, porHora.Departamento, porHora.Estado,
+                    null, porHora.SueldoPorHora, porHora.HorasTrabajadas, null, null, null),
+
+                EmpleadoPorComision porComision => new EmpleadoDetalleDto(
+                    porComision.Id, "PorComision", porComision.PrimerNombre, porComision.ApellidoPaterno,
+                    porComision.NumeroSeguroSocial, porComision.Departamento, porComision.Estado,
+                    null, null, null, porComision.VentasBrutas, porComision.TarifaComision, null),
+
+                EmpleadoAsalariadoComision asalariadoComision => new EmpleadoDetalleDto(
+                    asalariadoComision.Id, "AsalariadoComision", asalariadoComision.PrimerNombre, asalariadoComision.ApellidoPaterno,
+                    asalariadoComision.NumeroSeguroSocial, asalariadoComision.Departamento, asalariadoComision.Estado,
+                    null, null, null, asalariadoComision.VentasBrutas, asalariadoComision.TarifaComision, asalariadoComision.SalarioBase),
+
+                _ => null
+            };
+        }
+
+        public async Task<bool> ActualizarAsalariadoComisionAsync(int id, ActualizarEmpleadoAsalariadoComisionDto dto)
+        {
+            var empleado = await _empleadoRepository.ObtenerPorIdAsync(id);
+            if (empleado is not EmpleadoAsalariadoComision asalariadoComision)
+            {
+                return false;
+            }
+
+            asalariadoComision.VentasBrutas = dto.VentasBrutas;
+            asalariadoComision.TarifaComision = dto.TarifaComision;
+            asalariadoComision.SalarioBase = dto.SalarioBase;
+            await _empleadoRepository.ActualizarAsync(asalariadoComision);
+            await _empleadoRepository.GuardarCambiosAsync();
+            _logger.LogInformation("Empleado asalariado por comisión {Id} actualizado", id);
+            return true;
+        }
+
         public async Task<int> CrearPorHoraAsync(CrearEmpleadoPorHoraDto dto)
         {
             var empleado = new EmpleadoPorHora

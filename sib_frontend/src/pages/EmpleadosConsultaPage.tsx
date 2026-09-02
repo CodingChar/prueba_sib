@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import Layout from '../components/Layout'
 import api from '../services/api'
 import type { EmpleadoResponse } from '../types/empleado'
@@ -77,7 +78,8 @@ function EmpleadosConsultaPage() {
                 <th className="py-2 pr-4">Tipo</th>
                 <th className="py-2 pr-4">Departamento</th>
                 <th className="py-2 pr-4">Estado</th>
-                <th className="py-2 pr-4 text-right">Pago calculado</th>
+                <th className="py-2 pr-4 text-right">Pago Calculado</th>
+                <th className="py-2 pr-4"></th>
               </tr>
             </thead>
             <tbody>
@@ -91,11 +93,19 @@ function EmpleadosConsultaPage() {
                   <td className="py-2 pr-4 text-right">
                     RD$ {empleado.pagoCalculado.toLocaleString('es-DO', { minimumFractionDigits: 2 })}
                   </td>
+                  <td className="py-2 pr-4 text-right">
+                    <Link
+                      to={`/empleados/${empleado.id}/editar`}
+                      className="text-blue-700 text-xs font-medium hover:underline"
+                    >
+                      Editar
+                    </Link>
+                  </td>
                 </tr>
               ))}
               {empleados.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="py-6 text-center text-gray-400">
+                  <td colSpan={7} className="py-6 text-center text-gray-400">
                     No se encontraron empleados.
                   </td>
                 </tr>
