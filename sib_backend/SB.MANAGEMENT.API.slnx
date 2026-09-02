@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="SB.Management.Domain.Tests/SB.Management.Domain.Tests.csproj" Id="5eea85d7-b459-402b-9387-e90c312d2b87" />
   <Project Path="SIB.API/SB.Management.API.csproj" />
   <Project Path="SIB.Application/SB.Management.Application.csproj" Id="ba0d56f4-1a42-41e3-8ad1-fd7c4067ca94" />
   <Project Path="SIB.Domain/SB.Management.Domain.csproj" Id="e062f5e5-217c-40aa-9e5e-90b7d95e3146" />

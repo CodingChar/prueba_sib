@@ -3,8 +3,10 @@ import logoSb from '../assets/logo-sb.png'
 import homeIcon from '../assets/icons/home.svg'
 
 const navItems = [
-  { to: '/empleados', label: 'Consulta' },
-  { to: '/empleados/nuevo', label: 'Crear registro' },
+  { to: '/empleados', label: 'Consulta empleados' },
+  { to: '/empleados/nuevo', label: 'Crear empleado' },
+  { to: '/entidades-gubernamentales', label: 'Consulta entidades' },
+  { to: '/entidades-gubernamentales/nueva', label: 'Crear entidad' },
 ]
 
 function Sidebar() {
